@@ -1,6 +1,6 @@
 <Solution>
   <Folder Name="/Business/">
-    <Project Path="Codi.Logic.Contracts/CoDi.Logic.Contracts.csproj" />
+    <Project Path="CoDi.Logic.Contracts/CoDi.Logic.Contracts.csproj" />
     <Project Path="CoDi.Logic/CoDi.Logic.csproj" />
   </Folder>
   <Folder Name="/Client/">
@@ -10,7 +10,7 @@
     <Project Path="CoDi.Common/CoDi.Common.csproj" />
   </Folder>
   <Folder Name="/Database/">
-    <Project Path="Codi.Data.Contracts/CoDi.Data.Contracts.csproj" />
-    <Project Path="Codi.Data/CoDi.Data.csproj" />
+    <Project Path="CoDi.Data.Contracts/CoDi.Data.Contracts.csproj" />
+    <Project Path="CoDi.Data/CoDi.Data.csproj" />
   </Folder>
 </Solution>
