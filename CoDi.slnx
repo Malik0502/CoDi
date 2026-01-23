@@ -9,7 +9,7 @@
   <Folder Name="/Common/">
     <Project Path="CoDi.Common/CoDi.Common.csproj" />
   </Folder>
-  <Folder Name="/Database/">
+  <Folder Name="/Infrastructure/">
     <Project Path="CoDi.Data.Contracts/CoDi.Data.Contracts.csproj" />
     <Project Path="CoDi.Data/CoDi.Data.csproj" />
   </Folder>
