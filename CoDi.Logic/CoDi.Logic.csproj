@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CoDi.Logic.Contracts\CoDi.Logic.Contracts.csproj" />
+  </ItemGroup>
+
 </Project>

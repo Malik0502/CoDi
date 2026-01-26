@@ -14,6 +14,6 @@ public class Song
     [Column("artist")]
     public required string Artist { get; set; }
 
-    [Column("played_at")]
-    public DateTime PlayedAt { get; set; } = DateTime.Now;
+    public ICollection<DailySongStats> DailyStats { get; set; } = new List<DailySongStats>();
+
 }
