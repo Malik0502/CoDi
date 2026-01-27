@@ -4,6 +4,6 @@ namespace CoDi.Data.Contracts.CurrentSong;
 
 public interface IDailySongStatsRepository
 {
-    public Task<DailySongStats> GetDailySongStatsAsync(int songId, CancellationToken cancellationToken);
-    public Task<bool> AddOrUpdateDailySongStatsAsync(DailySongStats dailySongStats, CancellationToken cancellationToken);
+    public Task<DailySongStats?> GetSongStatsBySongIdAsync(int songId, CancellationToken cancellationToken);
+    public Task AddOrUpdateDailySongStatsAsync(int songId, CancellationToken cancellationToken);
 }

@@ -13,16 +13,19 @@ public class SongRepository(CoDiContext context) : ISongRepository
         return song;
     }
 
-    public async Task<bool> AddSongAsync(Song song, CancellationToken cancellationToken)
+    public async Task<Song?> AddSongAsync(Song song, CancellationToken cancellationToken)
     {
         var dbEntry = await GetSongAsync(song.Artist, song.Name, cancellationToken);
 
-        if (dbEntry != null) return false;
+        if (dbEntry != null)
+        {
+            return dbEntry;
+        }
 
-        await context.AddAsync(song, cancellationToken);
+        var result = await context.AddAsync(song, cancellationToken);
 
-        var result = await context.SaveChangesAsync(cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
 
-        return result == 1;
+        return result.Entity;
     }
 }

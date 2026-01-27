@@ -47,8 +47,13 @@ public class CurrentSongInspector(ISongRepository songRepository, IDailySongStat
         if (song == null)
             return null;
 
-        await songRepository.AddSongAsync(
+        var dbEntrySong = await songRepository.AddSongAsync(
             new Song { Artist = song.Artist, Name = song.Name }, cancellationToken);
+
+        if (dbEntrySong == null)
+            return null;
+
+        await dailySongStatsRepository.AddOrUpdateDailySongStatsAsync(dbEntrySong.Id, cancellationToken);
 
         return song;
     }
