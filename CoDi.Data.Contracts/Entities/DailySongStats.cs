@@ -19,8 +19,8 @@ public class DailySongStats
     [Column("first_played_at")]
     public TimeOnly FirstPlayedAt { get; set; }
 
-    [Column("last_played_at")]
-    public TimeOnly LastPlayedAt { get; set; }
+    [Column("time_played_sec")]
+    public TimeSpan TimePlayedSec { get; set; }
 
     public Song Song { get; set; } = null!;
 

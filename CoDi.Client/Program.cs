@@ -1,5 +1,8 @@
-﻿using System.Threading.Channels;
-using CoDi.Client.CurrentSong;
+﻿using CoDi.Client.CurrentSong;
+using CoDi.Common.Constants;
+using CoDi.Data;
+using CoDi.Data.Contracts.CurrentSong;
+using CoDi.Data.CurrentSong;
 using CoDi.Logic.Contracts.CurrentSong;
 using CoDi.Logic.CurrentSong;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,7 +12,6 @@ namespace CoDi.Client
 {
     class Program
     {
-
         static async Task Main(string[] args)
         {
             IHostBuilder builder = CreateHostBuilder(args);
@@ -30,7 +32,7 @@ namespace CoDi.Client
 
             var songTask = RunWatcherAsync(
                 name: "Song",
-                interval: TimeSpan.FromSeconds(5),
+                interval: TimeSpan.FromSeconds(WatcherCallInterval.SongWatcherInterval),
                 work: () => songWatcher.WatchSongs(cts.Token),
                 cancellationToken: cts.Token);
 
@@ -50,8 +52,7 @@ namespace CoDi.Client
                     var result = await work();
                     if (!string.IsNullOrWhiteSpace(result))
                     {
-                        Console.WriteLine($"[{name}]");
-                        Console.WriteLine($"{result}");
+                        Console.WriteLine($"[{name}] {result}");
                     }
                 }
                 catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
@@ -72,8 +73,11 @@ namespace CoDi.Client
         {
             return Host.CreateDefaultBuilder(args).ConfigureServices(services =>
             {
-                services.AddScoped<ICurrentSongInspector, CurrentSongInspector>();
+                services.AddDbContext<CoDiContext>();
                 services.AddTransient<SongWatcher>();
+                services.AddScoped<ICurrentSongInspector, CurrentSongInspector>();
+                services.AddScoped<ISongRepository, SongRepository>();
+                services.AddScoped<IDailySongStatsRepository, DailySongStatsRepository>();
             });
         }
 
