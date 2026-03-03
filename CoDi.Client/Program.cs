@@ -5,6 +5,7 @@ using CoDi.Data.Contracts.CurrentSong;
 using CoDi.Data.CurrentSong;
 using CoDi.Logic.Contracts.CurrentSong;
 using CoDi.Logic.CurrentSong;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -16,6 +17,12 @@ namespace CoDi.Client
         {
             IHostBuilder builder = CreateHostBuilder(args);
             var host = builder.Build();
+
+            using (var scope = host.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<CoDiContext>();
+                await db.Database.MigrateAsync();
+            }
 
             var songWatcher = host.Services.GetRequiredService<SongWatcher>();
 
