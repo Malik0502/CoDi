@@ -12,6 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CoDi.Common\CoDi.Common.csproj" />
+    <ProjectReference Include="..\CoDi.Data\CoDi.Data.csproj" />
     <ProjectReference Include="..\CoDi.Logic\CoDi.Logic.csproj" />
   </ItemGroup>
 

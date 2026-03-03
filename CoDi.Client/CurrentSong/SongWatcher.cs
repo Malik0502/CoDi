@@ -8,12 +8,7 @@ public class SongWatcher(ICurrentSongInspector currentSongInspector)
     {
         var currentSong = await currentSongInspector.GetCurrentSongAsync(cancellationToken);
 
-        if (currentSong == null)
-        {
-            return string.Empty;
-        }
-
-        if (string.IsNullOrEmpty(currentSong.Artist) || string.IsNullOrEmpty(currentSong.Name))
+        if (currentSong == null || string.IsNullOrEmpty(currentSong.Artist) || string.IsNullOrEmpty(currentSong.Name))
         {
             return string.Empty;
         }

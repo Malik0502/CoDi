@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CoDi.Common\CoDi.Common.csproj" />
     <ProjectReference Include="..\CoDi.Logic.Contracts\CoDi.Logic.Contracts.csproj" />
   </ItemGroup>
 

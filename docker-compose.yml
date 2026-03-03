@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: codi-postgres
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: CoDi_Develop
+      POSTGRES_USER: CoDi
+      POSTGRES_PASSWORD: CoDi
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - codi_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  codi_postgres_data:
