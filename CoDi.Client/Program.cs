@@ -1,10 +1,13 @@
 ﻿using CoDi.Client.CurrentSong;
+using CoDi.Client.RunningSoftware;
 using CoDi.Common.Constants;
 using CoDi.Data;
 using CoDi.Data.Contracts.CurrentSong;
 using CoDi.Data.CurrentSong;
 using CoDi.Logic.Contracts.CurrentSong;
+using CoDi.Logic.Contracts.RunningSoftware;
 using CoDi.Logic.CurrentSong;
+using CoDi.Logic.RunningSoftware;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,6 +28,7 @@ namespace CoDi.Client
             }
 
             var songWatcher = host.Services.GetRequiredService<SongWatcher>();
+            var softwareWatcher = host.Services.GetRequiredService<SoftwareWatcher>();
 
             Console.WriteLine("CoDi Client is now listening...");
             Console.WriteLine("Press Ctrl+C to cancel the Service");
@@ -37,20 +41,33 @@ namespace CoDi.Client
                 cts.Cancel();
             };
 
+            
+            await Task.WhenAll(CreateTasks(songWatcher, softwareWatcher, cts));
+        }
+
+        private static List<Task> CreateTasks(SongWatcher songWatcher, SoftwareWatcher softwareWatcher, CancellationTokenSource cts)
+        {
+            var tasks = new List<Task>();
+            
             var songTask = RunWatcherAsync(
                 name: "Song",
                 interval: TimeSpan.FromSeconds(WatcherCallInterval.SongWatcherInterval),
-                work: () => songWatcher.WatchSongs(cts.Token),
+                work: () => songWatcher.WatchSongs(cts.Token)!,
                 cancellationToken: cts.Token);
 
-            await Task.WhenAll(songTask);
+            var softwareTask = RunWatcherAsync(
+                name: "Software",
+                interval: TimeSpan.FromSeconds(WatcherCallInterval.SoftwareWatcherInterval),
+                work: () => softwareWatcher.WatchSoftware(cts.Token)!,
+                cancellationToken: cts.Token);
+
+            tasks.Add(songTask);
+            tasks.Add(softwareTask);
+
+            return tasks;
         }
 
-        private static async Task RunWatcherAsync(
-            string name, 
-            TimeSpan interval, 
-            Func<Task<string?>> work, 
-            CancellationToken cancellationToken)
+        private static async Task RunWatcherAsync(string name, TimeSpan interval, Func<Task<string?>> work, CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -85,6 +102,8 @@ namespace CoDi.Client
                 services.AddScoped<ICurrentSongInspector, CurrentSongInspector>();
                 services.AddScoped<ISongRepository, SongRepository>();
                 services.AddScoped<IDailySongStatsRepository, DailySongStatsRepository>();
+                services.AddScoped<ISoftwareInspector, SoftwareInspector>();
+                services.AddTransient<SoftwareWatcher>();
             });
         }
 
